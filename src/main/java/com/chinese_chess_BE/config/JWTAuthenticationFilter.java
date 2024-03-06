@@ -35,6 +35,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -47,7 +48,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             User user = (User) this.userDetailsService.loadUserByUsername(userEmail);
             var isValidToken = tokenRepository.findByToken(jwt)
-                            .map(token -> !token.isExpired() && token.isRevoked())
+                            .map(token -> !token.isExpired() && !token.isRevoked())
                     .orElse(false);
             if(jwtService.isTokenValid(jwt, user) && isValidToken){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

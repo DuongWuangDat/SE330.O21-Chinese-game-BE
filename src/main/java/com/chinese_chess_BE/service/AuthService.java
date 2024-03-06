@@ -8,6 +8,8 @@ import com.chinese_chess_BE.model.Token;
 import com.chinese_chess_BE.model.User;
 import com.chinese_chess_BE.repository.TokenRepository;
 import com.chinese_chess_BE.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -88,5 +90,32 @@ public class AuthService {
             token.setExpired(true);
         });
         tokenRepository.saveAll(tokenList);
+    }
+
+    public AuthenticationResponse refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
+        var authHeader = request.getHeader("Authorization");
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            return AuthenticationResponse.builder().build();
+        }
+        var refreshToken = authHeader.substring(7);
+        var userEmail = jwtService.extractEmail(refreshToken);
+        var user = userRepository.findByEmail(userEmail).get();
+        if(user== null){
+            return AuthenticationResponse.builder().build();
+        }
+        boolean isValidToken = jwtService.isTokenValid(refreshToken, user);
+        if(isValidToken){
+            return AuthenticationResponse.builder().build();
+        }
+        String accessToken = jwtService.generateToken(user);
+        revokeAllTokenUser(user);
+        saveTokenUser(accessToken,user);
+        return AuthenticationResponse.builder()
+                .refreshToken(refreshToken)
+                .accessToken(accessToken)
+                .build();
     }
 }

@@ -5,6 +5,8 @@ import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
 import com.chinese_chess_BE.model.User;
 import com.chinese_chess_BE.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,9 @@ public class UserRoute {
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest){
         return ResponseEntity.ok(authService.authenticate(authenticationRequest));
     }
-    @GetMapping("/ping")
-    public ResponseEntity<User> testServer(){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(user);
+    @GetMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request,
+                                                               HttpServletResponse response){
+        return ResponseEntity.ok(authService.refreshToken(request,response));
     }
 }

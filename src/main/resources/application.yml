@@ -5,3 +5,11 @@ spring:
     mongodb:
       uri: mongodb+srv://duongquangdat:quangdat@myserver.ruqy4gt.mongodb.net/?retryWrites=true&w=majority&appName=MyServer
       database: chinese-chess
+
+application:
+  security:
+    jwt:
+      secret-key: D9274B29454EFDD46C5DAD6EBADCD
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

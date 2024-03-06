@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.websocket.Decoder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,12 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
-    private final String SECRET_KEY = "D9274B29454EFDD46C5DAD6EBADCD";
+    @Value("${application.security.jwt.secret-key}")
+    private String SECRET_KEY;
+    @Value("${application.security.jwt.expiration}")
+    private long expiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private long refreshTokenExpiration;
     public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
@@ -33,18 +39,23 @@ public class JWTService {
                 .getBody();
     }
     public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(),userDetails);
+        return generateToken(new HashMap<>(),userDetails, expiration);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails){
+        return generateToken(new HashMap<>(), userDetails, refreshTokenExpiration);
     }
     public String generateToken(
             Map<String,Objects> extraClaims,
-            UserDetails user
+            UserDetails user,
+            long expiration
     ){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration((new Date(System.currentTimeMillis() + 1000*60*24)))
+                .setExpiration((new Date(System.currentTimeMillis() + expiration)))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

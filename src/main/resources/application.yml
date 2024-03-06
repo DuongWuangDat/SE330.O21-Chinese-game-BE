@@ -1,0 +1,7 @@
+#spring.data.mongodb.uri=mongodb+srv://duongquangdat:quangdat@myserver.ruqy4gt.mongodb.net/?retryWrites=true&w=majority&appName=MyServer
+#spring.data.mongodb.database=chinese-chess
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://duongquangdat:quangdat@myserver.ruqy4gt.mongodb.net/?retryWrites=true&w=majority&appName=MyServer
+      database: chinese-chess

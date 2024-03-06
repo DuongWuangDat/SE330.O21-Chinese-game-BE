@@ -15,15 +15,5 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     JWTService jwtService;
-    public String register(User user){
-        try{
-            User userSave = userRepository.save(user);
-            String token = jwtService.generateToken(userSave);
-            return token;
-        }
-        catch(Exception e){
-            return null;
-        }
 
-    }
 }

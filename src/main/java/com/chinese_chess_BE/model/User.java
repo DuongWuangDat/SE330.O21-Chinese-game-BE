@@ -1,5 +1,8 @@
 package com.chinese_chess_BE.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.CredentialsContainer;
@@ -9,9 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "user")
-public class User implements UserDetails, CredentialsContainer {
+public class User implements UserDetails {
     @Id
     private String id;
     private String email;
@@ -19,37 +24,6 @@ public class User implements UserDetails, CredentialsContainer {
     private String password;
     private String nation;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNation() {
-        return nation;
-    }
-
-    public void setNation(String nation) {
-        this.nation = nation;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -86,19 +60,4 @@ public class User implements UserDetails, CredentialsContainer {
         return true;
     }
 
-    @Override
-    public void eraseCredentials() {
-
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", nation='" + nation + '\'' +
-                '}';
-    }
 }

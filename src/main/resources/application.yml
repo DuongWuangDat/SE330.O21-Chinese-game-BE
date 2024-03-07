@@ -5,6 +5,14 @@ spring:
     mongodb:
       uri: mongodb+srv://duongquangdat:quangdat@myserver.ruqy4gt.mongodb.net/?retryWrites=true&w=majority&appName=MyServer
       database: chinese-chess
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 825569252266-948mbvjhosq3ue5dvgk5679dvu2mssse.apps.googleusercontent.com
+            client-secret: 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
+
 
 application:
   security:

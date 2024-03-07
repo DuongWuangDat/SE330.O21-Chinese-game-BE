@@ -31,6 +31,7 @@ public class SecurityConfiguration{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .oauth2Login(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WHITE_LIST_URL).permitAll()
                         .anyRequest().authenticated()

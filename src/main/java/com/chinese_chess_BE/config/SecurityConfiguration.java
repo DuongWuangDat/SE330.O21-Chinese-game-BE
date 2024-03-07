@@ -22,8 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration{
     private final String[] WHITE_LIST_URL = {
             "/api/v1/auth/**",
-            "/api/v1/history/create",
-            "/"
+            "/api/v1/history/create"
     };
 
     private final AuthenticationProvider authenticationProvider;
@@ -32,14 +31,11 @@ public class SecurityConfiguration{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .oauth2Login(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WHITE_LIST_URL).permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(sess-> sess
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .oauth2Login(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

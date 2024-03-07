@@ -13,7 +13,11 @@ spring:
             client-id: 825569252266-948mbvjhosq3ue5dvgk5679dvu2mssse.apps.googleusercontent.com
             client-secret: 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
 
-
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
 application:
   security:
     jwt:

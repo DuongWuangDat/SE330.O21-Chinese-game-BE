@@ -24,8 +24,7 @@ public class HistoryService {
     UserRepository userRepository;
 
     public List<History> getAllHistory(){
-        List<History> historyList= historyRepository.findAll();
-        return historyList;
+        return historyRepository.findAll();
     }
 
     public Page<History> getAllByUserId(String userID, int page, int limit){

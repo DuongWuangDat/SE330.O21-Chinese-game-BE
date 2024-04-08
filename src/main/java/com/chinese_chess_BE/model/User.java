@@ -28,7 +28,7 @@ import java.util.Map;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = "user")
-public class User implements UserDetails, OidcUser {
+public class User implements UserDetails {
     @Id
     private String id;
     private String email;
@@ -38,13 +38,8 @@ public class User implements UserDetails, OidcUser {
     private String nation;
     private int elo;
     @Field(targetType = FieldType.STRING)
-    private LoginProvider loginProvider;
-    private Map<String, Object> attribute;
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attribute;
-    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -82,23 +77,4 @@ public class User implements UserDetails, OidcUser {
     }
 
 
-    @Override
-    public Map<String, Object> getClaims() {
-        return attribute;
-    }
-
-    @Override
-    public OidcUserInfo getUserInfo() {
-        return null;
-    }
-
-    @Override
-    public OidcIdToken getIdToken() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
 }

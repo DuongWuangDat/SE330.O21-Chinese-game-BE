@@ -33,7 +33,7 @@ public class HistoryService {
         return historyRepository.findByUser1IdOrUser2Id(userID,userID, pageRequest);
     }
 
-    public History createNewHistory(History history){
+    public History createNewHistory(History history, int winScore, int loseScore){
         if(history.getUser1Id().equals(history.getUser2Id()) ){
             return null;
         }
@@ -44,9 +44,17 @@ public class HistoryService {
         history.setUser1(user1);
         if(history.getUser1Score()> history.getUser2Score()){
             history.setWinner(history.getUser1Id());
+            user1.setElo(user1.getElo()+winScore);
+            user2.setElo(user2.getElo()-loseScore);
+            userRepository.save(user1);
+            userRepository.save(user2);
         }
         else if(history.getUser1Score()< history.getUser2Score()){
             history.setWinner(history.getUser2Id());
+            user1.setElo(user1.getElo()-loseScore);
+            user2.setElo(user2.getElo()+winScore);
+            userRepository.save(user1);
+            userRepository.save(user2);
         }
         else {
             history.setWinner("-1");

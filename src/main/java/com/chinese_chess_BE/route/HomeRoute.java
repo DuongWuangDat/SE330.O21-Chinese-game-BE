@@ -14,14 +14,5 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 public class HomeRoute {
-    @Autowired
-    TokenRepository tokenRepository;
-    @GetMapping("/secured")
-    public String secured() {
-//User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //String token = tokenRepository.findByUserIdAndExpiredAndRevoked(user.getId(), false, false).get(0).getToken();
-        return "Hello";
-    }
-
 
 }

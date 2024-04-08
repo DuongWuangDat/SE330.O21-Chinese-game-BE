@@ -28,16 +28,16 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 @EnableMethodSecurity
 public class SecurityConfiguration{
     private final String[] WHITE_LIST_URL = {
-            "/api/v1/history/**",
-            "/api/v1/auth/**"
+            "/api/v1/history/create",
+            "/api/v1/auth/**",
+            "/api/v1/user/leaderboard"
     };
 
     private final AuthenticationProvider authenticationProvider;
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final LogoutHandler logOutHandler;
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler,
-                                           OAuth2UserService<OidcUserRequest, OidcUser> oidcLoginHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -46,10 +46,6 @@ public class SecurityConfiguration{
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-               .oauth2Login(oc-> oc
-                       .userInfoEndpoint(ui -> ui
-                               .userService(oauth2LoginHandler)
-                               .oidcUserService(oidcLoginHandler)))
                .logout(logout -> logout
                        .logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logOutHandler)

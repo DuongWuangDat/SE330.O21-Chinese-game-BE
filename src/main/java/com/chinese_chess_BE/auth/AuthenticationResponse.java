@@ -1,5 +1,6 @@
 package com.chinese_chess_BE.auth;
 
+import com.chinese_chess_BE.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,4 +16,6 @@ public class AuthenticationResponse {
     private String accessToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
+    @JsonProperty("data")
+    private User user;
 }

@@ -4,7 +4,6 @@ import com.chinese_chess_BE.auth.AuthenticationRequest;
 import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
 import com.chinese_chess_BE.config.JWTService;
-import com.chinese_chess_BE.model.LoginProvider;
 import com.chinese_chess_BE.model.Token;
 import com.chinese_chess_BE.model.User;
 import com.chinese_chess_BE.repository.TokenRepository;
@@ -13,23 +12,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -54,9 +44,7 @@ public class AuthService {
                 .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .attribute(new HashMap<>())
                 .nation(registerRequest.getNation() )
-                .loginProvider(LoginProvider.FORM)
                 .elo(200)
                 .build();
         User userSave = userRepository.save(user);
@@ -66,6 +54,7 @@ public class AuthService {
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .user(userSave)
                 .build();
     }
 
@@ -84,6 +73,7 @@ public class AuthService {
             return  AuthenticationResponse.builder()
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
+                    .user(user)
                     .build();
         }
         catch(Exception e){
@@ -141,60 +131,6 @@ public class AuthService {
                 .build();
     }
 
-    //Oauth2
-    @Bean
-    public OAuth2UserService<OidcUserRequest, OidcUser> oidcLoginHandler(){
-        return userRequest -> {
-            LoginProvider provider = getProvider(userRequest);
-            OidcUser oidcUser = oidcDelegate.loadUser(userRequest);
-            var user = userRepository.findByEmail(oidcUser.getEmail());
-            User userSave;
-            if(user.isEmpty()){
-                userSave = User.builder()
-                        .loginProvider(provider)
-                        .elo(200)
-                        .username(oidcUser.getFullName())
-                        .email(oidcUser.getEmail())
-                        .attribute(oidcUser.getAttributes())
-                        .password(passwordEncoder.encode(UUID.randomUUID().toString()))
-                        .nation(null)
-                        .build();
-                userRepository.save(userSave);
-            }
-            userSave = user.get();
-            //System.out.println(userRequest.getIdToken().getTokenValue());
-            return userSave;
-        };
-    }
-
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2LoginHandler() {
-        return userRequest -> {
-            LoginProvider provider = getProvider(userRequest);
-            OAuth2User oAuth2User = oauthDelegate.loadUser(userRequest);
-            var user = userRepository.findByEmail(oAuth2User.getAttribute("login"));
-            User userSave;
-            if(user.isEmpty()){
-                userSave = User.builder()
-                        .loginProvider(provider)
-                        .elo(200)
-                        .attribute(oAuth2User.getAttributes())
-                        .username(oAuth2User.getAttribute("login"))
-                        .email(oAuth2User.getAttribute("login"))
-                        .password(passwordEncoder.encode(UUID.randomUUID().toString()))
-                        .nation(null)
-                        .build();
-                userRepository.save(userSave);
-            }
-            userSave = user.get();
-            //System.out.println(userRequest.getAccessToken().getTokenValue());
-            return userSave;
-        };
-    }
-
-    public LoginProvider getProvider (OAuth2UserRequest userRequest){
-        return LoginProvider.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
-    }
 
     //Authenticate Security Context Holder
     public User authenticateSecurityContextHolder(){

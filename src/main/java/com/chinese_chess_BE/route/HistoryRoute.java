@@ -44,8 +44,8 @@ public class HistoryRoute {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Message> createNewHistory(@RequestBody History history){
-        History historyResult= historyService.createNewHistory(history);
+    public ResponseEntity<Message> createNewHistory(@RequestBody History history, @RequestParam int winScore, @RequestParam int loseScore){
+        History historyResult= historyService.createNewHistory(history, winScore,loseScore);
         if(historyResult==null){
             return ResponseEntity.status(403).body(
                     Message.builder()

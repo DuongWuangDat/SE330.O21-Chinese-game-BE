@@ -1,29 +1,42 @@
 package com.chinese_chess_BE.route;
 
 import com.chinese_chess_BE.model.User;
+import com.chinese_chess_BE.repository.UserRepository;
 import com.chinese_chess_BE.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
 public class UserRoute {
-    public final AuthService authService;
-    @GetMapping("/")
-    public ResponseEntity<User> getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = authService.authenticateSecurityContextHolder();
-        if(user==null){
-            return ResponseEntity.status(401).body(null);
-        }
-        return ResponseEntity.ok(user);
+    @Autowired
+    public UserRepository userRepository;
+
+    @GetMapping("/leaderboard")
+    public ResponseEntity<List<User>> getLeaderboard(){
+        List<User> userList = userRepository.findByOrderByEloDesc();
+        return ResponseEntity.ok(userList);
     }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user){
+        User userResult = userRepository.findById(id).orElse(null);
+        if(userResult==null){
+            return ResponseEntity.status(403).body(null);
+        }
+        userResult = user;
+        userRepository.save(userResult);
+        return ResponseEntity.ok(userResult);
+    }
+
 }

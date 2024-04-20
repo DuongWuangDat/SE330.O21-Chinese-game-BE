@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/history")
 public class HistoryRoute {

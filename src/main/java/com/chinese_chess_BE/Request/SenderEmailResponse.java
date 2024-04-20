@@ -1,4 +1,4 @@
-package com.chinese_chess_BE.auth;
+package com.chinese_chess_BE.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String username;
-    private String email;
-    private String password;
-
+public class SenderEmailResponse {
+    private String message;
+    private String code;
 }

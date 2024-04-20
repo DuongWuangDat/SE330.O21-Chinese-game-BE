@@ -1,21 +1,19 @@
 package com.chinese_chess_BE.route;
 
+import com.chinese_chess_BE.Request.ChangePasswordRequest;
+import com.chinese_chess_BE.Request.EmailSenderJSon;
+import com.chinese_chess_BE.Request.SenderEmailResponse;
 import com.chinese_chess_BE.auth.AuthenticationRequest;
 import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
-import com.chinese_chess_BE.model.User;
+import com.chinese_chess_BE.Request.Message;
 import com.chinese_chess_BE.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,4 +43,23 @@ public class AuthRoute {
         return ResponseEntity.ok(authService.refreshToken(request,response));
     }
 
+    @GetMapping("/location")
+    public ResponseEntity<String> getLocation(){
+        return ResponseEntity.ok(authService.getLocationAddress());
+    }
+
+    @PostMapping("/sendemail")
+    public ResponseEntity<SenderEmailResponse> sendEmail(@RequestBody EmailSenderJSon email){
+        String code = authService.sendEmail(email.getEmail());
+        return ResponseEntity.ok(SenderEmailResponse.builder().message("Send email successfully").code(code).build());
+    }
+
+    @PatchMapping("/changepassword")
+    public ResponseEntity<Message> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+        boolean isSuccess = authService.changePassword(changePasswordRequest.getEmail(),changePasswordRequest.getPassword());
+        if(!isSuccess){
+            return ResponseEntity.status(400).body(Message.builder().message("Some thing went wrong").build());
+        }
+        return ResponseEntity.ok(Message.builder().message("Change password successfully").build());
+    }
 }

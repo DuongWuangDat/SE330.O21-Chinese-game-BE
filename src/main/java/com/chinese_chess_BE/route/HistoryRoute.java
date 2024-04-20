@@ -1,16 +1,13 @@
 package com.chinese_chess_BE.route;
 
 import com.chinese_chess_BE.model.History;
-import com.chinese_chess_BE.model.Message;
+import com.chinese_chess_BE.Request.Message;
 import com.chinese_chess_BE.model.User;
-import com.chinese_chess_BE.repository.HistoryRepository;
 import com.chinese_chess_BE.service.AuthService;
 import com.chinese_chess_BE.service.HistoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

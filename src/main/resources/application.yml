@@ -5,6 +5,17 @@ spring:
     mongodb:
       uri: mongodb+srv://duongquangdat:quangdat@myserver.ruqy4gt.mongodb.net/?retryWrites=true&w=majority&appName=MyServer
       database: chinese-chess
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: skillexchange0104@gmail.com
+    password: iuqimiitaxkvttxi
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:

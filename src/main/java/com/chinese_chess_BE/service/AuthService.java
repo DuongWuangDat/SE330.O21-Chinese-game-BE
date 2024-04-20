@@ -206,4 +206,11 @@ public class AuthService {
         return true;
     }
 
+    public boolean checkIsValidToken(String token){
+        if(jwtService.isTokenExpired(token)){
+            return false;
+        }
+        return true;
+    }
+
 }

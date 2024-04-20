@@ -1,12 +1,9 @@
 package com.chinese_chess_BE.route;
 
-import com.chinese_chess_BE.Request.ChangePasswordRequest;
-import com.chinese_chess_BE.Request.EmailSenderJSon;
-import com.chinese_chess_BE.Request.SenderEmailResponse;
+import com.chinese_chess_BE.Request.*;
 import com.chinese_chess_BE.auth.AuthenticationRequest;
 import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
-import com.chinese_chess_BE.Request.Message;
 import com.chinese_chess_BE.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,5 +59,14 @@ public class AuthRoute {
             return ResponseEntity.status(400).body(Message.builder().message("Some thing went wrong").build());
         }
         return ResponseEntity.ok(Message.builder().message("Change password successfully").build());
+    }
+
+    @PostMapping("/validatetoken")
+    public ResponseEntity<Message> validateToken(@RequestBody ValidateTokenReq tokenReq){
+        boolean isValid = authService.checkIsValidToken(tokenReq.getToken());
+        if(!isValid){
+            return ResponseEntity.status(400).body(Message.builder().message("Some thing went wrong").build());
+        }
+        return ResponseEntity.ok(Message.builder().message("Validate token successfully").build());
     }
 }

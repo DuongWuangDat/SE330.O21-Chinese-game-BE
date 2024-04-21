@@ -47,7 +47,7 @@ public class AuthService {
     private final DefaultOAuth2UserService oauthDelegate = new DefaultOAuth2UserService();
     private final OidcUserService oidcDelegate = new OidcUserService();
 
-    public AuthenticationResponse register(RegisterRequest registerRequest){
+    public AuthenticationResponse register(RegisterRequest registerRequest, HttpServletRequest request){
         var userExistEmail = userRepository.findByEmail(registerRequest.getEmail());
         if(userExistEmail.isPresent()){
             return null;
@@ -56,7 +56,7 @@ public class AuthService {
                 .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .nation(getLocationAddress())
+                .nation(getLocationAddress(request))
                 .elo(200)
                 .build();
         User userSave = userRepository.save(user);
@@ -157,9 +157,22 @@ public class AuthService {
         return user;
     }
 
-    public String getLocationAddress(){
+    private String getClientIp(HttpServletRequest request) {
+        String remoteAddr = "";
+
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+        return remoteAddr;
+    }
+    public String getLocationAddress(HttpServletRequest request){
+        String ip = request.getRemoteAddr();
+        System.out.println(ip);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity("http://ip-api.com/json/", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("http://ip-api.com/json/"+ ip, String.class);
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode root = mapper.readTree(response.getBody());

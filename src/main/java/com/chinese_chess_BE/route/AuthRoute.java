@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthRoute {
     private final AuthService authService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerUser (@RequestBody RegisterRequest registerRequest){
-        AuthenticationResponse authenticationResponse = authService.register(registerRequest);
+    public ResponseEntity<AuthenticationResponse> registerUser (@RequestBody RegisterRequest registerRequest, HttpServletRequest request){
+        AuthenticationResponse authenticationResponse = authService.register(registerRequest,request);
         if(authenticationResponse==null){
             return ResponseEntity.status(409).body(null);
         }
@@ -42,8 +42,8 @@ public class AuthRoute {
     }
 
     @GetMapping("/location")
-    public ResponseEntity<String> getLocation(){
-        return ResponseEntity.ok(authService.getLocationAddress());
+    public ResponseEntity<String> getLocation(HttpServletRequest request){
+        return ResponseEntity.ok(authService.getLocationAddress(request));
     }
 
     @PostMapping("/sendemail")

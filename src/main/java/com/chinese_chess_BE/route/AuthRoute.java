@@ -22,7 +22,7 @@ public class AuthRoute {
     public ResponseEntity<AuthenticationResponse> registerUser (@RequestBody RegisterRequest registerRequest){
         AuthenticationResponse authenticationResponse = authService.register(registerRequest);
         if(authenticationResponse==null){
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(409).body(null);
         }
         return ResponseEntity.ok(authenticationResponse);
     }

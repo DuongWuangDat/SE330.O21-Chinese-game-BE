@@ -169,7 +169,7 @@ public class AuthService {
         return remoteAddr;
     }
     public String getLocationAddress(HttpServletRequest request){
-        String ip = request.getRemoteAddr();
+        String ip = getClientIp(request);
         System.out.println(ip);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity("http://ip-api.com/json/"+ ip, String.class);

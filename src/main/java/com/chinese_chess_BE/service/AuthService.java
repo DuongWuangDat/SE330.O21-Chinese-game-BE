@@ -131,7 +131,7 @@ public class AuthService {
             return AuthenticationResponse.builder().build();
         }
         boolean isValidToken = jwtService.isTokenValid(refreshToken, user);
-        if(isValidToken){
+        if(!isValidToken){
             return AuthenticationResponse.builder().build();
         }
         String accessToken = jwtService.generateToken(user);

@@ -140,6 +140,7 @@ public class AuthService {
         return AuthenticationResponse.builder()
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
+                .user(user)
                 .build();
     }
 

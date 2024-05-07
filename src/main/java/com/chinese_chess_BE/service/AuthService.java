@@ -104,16 +104,7 @@ public class AuthService {
         tokenRepository.save(token);
     }
     public void revokeAllTokenUser(User user){
-        var tokenList = tokenRepository.findByUserIdAndExpiredAndRevoked(user.getId(),false,false);
-        if(tokenList.isEmpty()){
-            return;
-        }
-        System.out.println(tokenList);
-        tokenList.forEach(token -> {
-            token.setRevoked(true);
-            token.setExpired(true);
-        });
-        tokenRepository.saveAll(tokenList);
+        tokenRepository.deleteByUserId(user.getId());
     }
 
     public AuthenticationResponse refreshToken(

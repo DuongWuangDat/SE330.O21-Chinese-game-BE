@@ -11,4 +11,5 @@ public interface TokenRepository extends MongoRepository<Token, String> {
 
     List<Token> findByUserIdAndExpiredAndRevoked(String userId, boolean expired, boolean revoked);
     Optional<Token> findByToken(String token);
+    void deleteByUserId(String userId);
 }

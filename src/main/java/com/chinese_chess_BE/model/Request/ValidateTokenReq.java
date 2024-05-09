@@ -1,4 +1,4 @@
-package com.chinese_chess_BE.Request;
+package com.chinese_chess_BE.model.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SenderEmailResponse {
-    private String message;
-    private String code;
+public class ValidateTokenReq {
+    private String token;
 }

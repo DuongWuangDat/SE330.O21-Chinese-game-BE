@@ -1,7 +1,7 @@
 package com.chinese_chess_BE.route;
 
 import com.chinese_chess_BE.model.History;
-import com.chinese_chess_BE.Request.Message;
+import com.chinese_chess_BE.model.Request.Message;
 import com.chinese_chess_BE.model.User;
 import com.chinese_chess_BE.service.AuthService;
 import com.chinese_chess_BE.service.HistoryService;

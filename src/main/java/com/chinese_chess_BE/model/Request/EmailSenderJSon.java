@@ -1,4 +1,4 @@
-package com.chinese_chess_BE.Request;
+package com.chinese_chess_BE.model.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

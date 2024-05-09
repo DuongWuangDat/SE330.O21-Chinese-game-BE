@@ -1,4 +1,4 @@
-package com.chinese_chess_BE.Request;
+package com.chinese_chess_BE.model.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangePasswordRequest {
-    private String email;
-    private String password;
+public class Message {
+    private String message;
 }

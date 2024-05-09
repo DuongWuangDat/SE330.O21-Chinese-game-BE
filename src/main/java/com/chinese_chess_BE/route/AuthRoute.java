@@ -4,6 +4,7 @@ import com.chinese_chess_BE.Request.*;
 import com.chinese_chess_BE.auth.AuthenticationRequest;
 import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
+import com.chinese_chess_BE.model.Request.*;
 import com.chinese_chess_BE.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

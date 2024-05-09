@@ -1,6 +1,6 @@
 package com.chinese_chess_BE.route;
 
-import com.chinese_chess_BE.Request.*;
+
 import com.chinese_chess_BE.auth.AuthenticationRequest;
 import com.chinese_chess_BE.auth.AuthenticationResponse;
 import com.chinese_chess_BE.auth.RegisterRequest;
